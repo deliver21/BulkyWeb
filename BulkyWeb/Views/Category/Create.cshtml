@@ -1,0 +1,59 @@
+﻿@model Category
+<div class="card shadow border-0 mb-5 mt-5 pt-2">
+    <div class="card-header bg-primary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white">Create Category</h2>
+            </div>            
+        </div>
+    </div>
+    <div class="card-body pt-4">
+        <div class="form-container">
+            <form method="post" class="row">
+                <div class="border p-3 mt-4 form-group">
+                    <div asp-validation-summary="All" class="text-danger-emphasis"></div>
+                    <div class="mb-3 form-floating col-12">
+                        <input asp-for="Name" placeholder=""  class="form-control border-0 shadow ps-lg-4" />
+                        <label asp-for="Name" class="ms-2"></label>
+
+                        @*Monitor the validation for name in the UI@*@
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 form-floating col-12">
+                        @*Place holder is basically used to write someting inside the input ssection while waiting for text
+                            entry inside , whenever there's a entry inside , it dissapears 
+                            however in our context since we used the form-floating class it differently works
+                            As long we don't click in input section the label text is big , else the size decreases.'
+                        *@
+                        <input asp-for="DisplayOrder" placeholder="" class="form-control border-0 shadow ps-lg-4" />
+                        <label asp-for="DisplayOrder" class="ms-2"></label>
+                        @*Monitor the validation for displayOrder in the UI@*@
+                        <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col-3 col-md-3">
+                            <button type="submit" class="btn btn-primary bg-dark" style="width:150px">
+                                Create
+                            </button>
+                        </div>
+                        <div class="col-6">
+                        </div>
+                        <div class="col-3 col-md-3 text-end">
+                            <a asp-controller="Category" asp-action="Index" class="btn btn-primary">
+                                Back to list
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>       
+    </div>
+</div>
+
+@section Scripts
+{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

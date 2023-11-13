@@ -1,0 +1,57 @@
+﻿@model Category;
+@{
+    ViewData["tilte"]= "Delete";
+}
+@*Card is used to have grid in the border of your form or table or any element*@
+<div class="card shadow mb-5 mt-5 pt-2">
+    @*The card has the header *@
+    <div class="card-header bg-primary bg-gradient">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white">Delete Category</h2>
+            </div>
+        </div>
+    </div>
+    @*And here the body that contain the body content inside*@
+    <div class="card-body">
+        <form method="post" class="row">
+            <div class="border pb-3">
+                <input asp-for="Id" hidden/>
+                <div asp-validation-summary="All" class="text-danger-emphasis"></div>
+                <div class="mb-3 form-floating col-12 bg-white">
+                    @*form-control class allows to have a wide input section  and proportional to form size
+                        while using it the input attribute comes before the label
+                    *@
+                    <input asp-for="Name" class="form-control border-0 shadow ps-lg-4" disabled />
+                    <label asp-for="Name" class="ms-2 text-dark"></label>
+
+                    @*Monitor the validation for name in the UI@*@
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="mb-3 form-floating col-12 bg-white">
+                    <input asp-for="DisplayOrder" class="form-control border-0 shadow ps-lg-4" disabled />
+                    <label asp-for="DisplayOrder" class="ms-2 text-dark"></label>
+                    @*Monitor the validation for displayOrder in the UI@*@
+                    <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+                </div>
+                <div class="row pt-2">
+                    <div class="col-3 col-md-3">
+                        <button type="submit" class="btn btn-primary bg-dark" style="width:150px">
+                            Delete
+                        </button>
+                    </div>
+                    <div class="col-6">
+                    </div>
+                    <div class="col-3 col-md-3 text-end">
+                        <a asp-controller="Category" asp-action="Index" class="btn btn-primary">
+                            Back to list
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+

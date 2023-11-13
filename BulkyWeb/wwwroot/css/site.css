@@ -12,7 +12,26 @@ html {
   position: relative;
   min-height: 100%;
 }
-
+.form-container{
+    /*max-height:300px;
+    overflow-y:auto;*/
+}
+.edit-container{
+   /* max-height:300px;
+    overflow-y:auto;*/
+}
 body {
-  margin-bottom: 60px;
+    /* margin-bottom: 60px;*/
+    min-height: 100vh;
+}
+/*header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+}*/
+footer{
+    position:fixed;
+    bottom:0;
+    width:100%;
 }
