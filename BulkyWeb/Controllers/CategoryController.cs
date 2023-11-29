@@ -9,8 +9,8 @@ namespace BulkyWeb.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly CategoryRepository _categoryRepo;
-        public CategoryController(CategoryRepository db) 
+        private readonly ICategoryRepository _categoryRepo;
+        public CategoryController(ICategoryRepository db) 
         {
             this._categoryRepo= db;
         }
