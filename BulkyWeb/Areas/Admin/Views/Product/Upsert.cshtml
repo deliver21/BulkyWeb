@@ -1,0 +1,157 @@
+﻿@model ProductVM;
+<div class="card shadow border-0 mb-5 mt-5 pt-2">
+  <div class="card-header bg-primary bg-gradient ml-0 py-3">
+    <div class="row">
+        <div class="col-12 text-center">
+                @*For Dynamic content in the page we use Model.Product.Id!=0 ? "Update" : "Create"*@
+            <h2 class="text-white">@(Model.Product.Id!=0 ? "Update" : "Create") Product</h2>
+        </div>
+    </div>
+  </div>
+  <div class="card-body pt-4">
+    <div class="form-container">
+        <form method="post" class="row" enctype="multipart/form-data">
+            <input asp-for="Product.Id" hidden />
+                @*<input asp-for="Product.ImageUrl" hidden /> here is needed to not have a null value while there's a value in the Upsert Post Action*@
+                @*Especially in the condition if(!string.IsNullOrEmpty(obj.Product.ImageUrl))*@
+            <input asp-for="Product.ImageUrl" hidden />
+            <div class="row">
+                     <div class="col-2 mt-4">
+                    <img src="@Model.Product.ImageUrl" width="100%" style="border-radius:5px; border:1px solid #bbb9b9"/>
+                    </div>
+                <div class="col-10">
+                        <div class="border p-3 mt-4 form-group">
+                            <div asp-validation-summary="All" class="text-danger-emphasis"></div>
+                            @*Place holder is basically used to write someting inside the input section while waiting for text
+                            entry inside , whenever there's a entry inside , it dissapears
+                            however in our context since we used the form-floating class it differently works
+                            As long we don't click in input section the label text is big , else the size decreases.'
+                            *@
+                            <div class="mb-3 form-floating col-12">
+                                <input asp-for="Product.Title" placeholder="" class="form-control border-0 shadow ps-lg-4" />
+                                <label asp-for="Product.Title" class="ms-2"></label>
+
+                                @*Monitor the validation for title in the UI@*@
+                                <span asp-validation-for="Product.Title" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3 col-12">
+                                <label asp-for="Product.Description" class="ms-2 text-muted"></label>
+                                <textarea data-bs-theme="light" asp-for="Product.Description" class="form-control border-0 shadow ps-lg-4"></textarea>
+
+                            </div>
+                            <div class="mb-3 form-floating col-12">
+                                <input asp-for="Product.ISBN" placeholder="" class="form-control border-0 shadow ps-lg-4" />
+                                <label asp-for="Product.ISBN" class="ms-2"></label>
+
+                                @*Monitor the validation for title in the UI@*@
+                                <span asp-validation-for="Product.ISBN" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3 form-floating col-12">
+                                <input asp-for="Product.Author" placeholder="" class="form-control border-0 shadow ps-lg-4" />
+                                <label asp-for="Product.Author" class="ms-2"></label>
+
+                                @*Monitor the validation for title in the UI@*@
+                                <span asp-validation-for="Product.Author" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3 form-floating col-12">
+                                <input asp-for="Product.ListPrice" placeholder="" class="form-control border-0 shadow ps-lg-4" />
+                                <label asp-for="Product.ListPrice" class="ms-2"></label>
+
+                                @*Monitor the validation for title in the UI@*@
+                                <span asp-validation-for="Product.ListPrice" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3 form-floating col-12">
+                                <input asp-for="Product.Price" placeholder="" class="form-control border-0 shadow ps-lg-4" />
+                                <label asp-for="Product.Price" class="ms-2"></label>
+
+                                @*Monitor the validation for title in the UI@*@
+                                <span asp-validation-for="Product.Price" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3 form-floating col-12">
+                                <input asp-for="Product.Price50" placeholder="" class="form-control border-0 shadow ps-lg-4" />
+                                <label asp-for="Product.Price50" class="ms-2"></label>
+
+                                @*Monitor the validation for title in the UI@*@
+                                <span asp-validation-for="Product.Price50" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3 form-floating col-12">
+                                <input asp-for="Product.Price100" placeholder="" class="form-control border-0 shadow ps-lg-4" />
+                                <label asp-for="Product.Price100" class="ms-2"></label>
+
+                                @*Monitor the validation for title in the UI@*@
+                                <span asp-validation-for="Product.Price100" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3 form-floating col-12">
+                                @*name="file" is to return a file value which is its path in the target controller*@
+                                <input type="file" name="file" placeholder="" class="form-control border-0 shadow ps-lg-4" />
+                                <label asp-for="Product.ImageUrl" class="ms-2"></label>
+                            </div>
+                            <div class="mb-3 form-floating col-12">
+                                <select asp-for="Product.CategoryId" asp-items="@Model.CategoryList" class="form-select border-0 shadow ps-lg-4">
+                                    <option disabled selected>----Select Category----</option>
+                                </select>
+                                <label asp-for="Product.CategoryId" class="ms-2"></label>
+
+                                @*Monitor the validation for title in the UI@*@
+                                <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+                            </div>
+                            <div class="row pt-2">
+                                <div class="col-3 col-md-3">
+                                    <button type="submit" class="btn btn-primary bg-dark" style="width:150px">
+                                        @(Model.Product.Id != 0 ? "Update" : "Create")
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                </div>
+                                <div class="col-3 col-md-3 text-end">
+                                    <a asp-controller="Product" asp-action="Index" class="btn btn-primary">
+                                        Back to list
+                                    </a>
+                                </div>
+
+                            </div>
+                </div>
+               @* <div class="col-2">
+                    <img src="@Model.Product.ImageUrl" width="100%"style="border-radius:5px; border:1px solid #bbb9b9"/>
+                </div>*@
+            </div>
+           
+             
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+@section Scripts
+    {
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name',
+            mergetags_list: [
+                { value: 'First.Name', title: 'First Name' },
+                { value: 'Email', title: 'Email' },
+            ],
+            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+        });
+    </script>
+   @*  <script type="text/javascript">
+        document.getElementById('btnSwitch').addEventListener('click',()=>
+        {
+            if (document.documentElement.getAttribute('data-bs-theme') == 'dark') {
+                document.documentElement.setAttribute('data-bs-theme','light')
+            }
+            else{
+                document.documentElement.setAttribute('data-bs-theme','dark')
+            }
+                })
+     </script>*@
+    @{
+
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

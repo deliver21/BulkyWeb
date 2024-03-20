@@ -1,0 +1,106 @@
+﻿@model Company;
+<div class="card shadow border-0 mb-5 mt-5 pt-2">
+  <div class="card-header bg-primary bg-gradient ml-0 py-3">
+    <div class="row">
+        <div class="col-12 text-center">
+                @*For Dynamic content in the page we use Model.Product.Id!=0 ? "Update" : "Create"*@
+            <h2 class="text-white">@(Model.Id!=0 ? "Update" : "Create") Company</h2>
+        </div>
+    </div>
+  </div>
+  <div class="card-body pt-4">
+    <div class="form-container">
+        <form method="post" class="row" enctype="multipart/form-data">
+            <input asp-for="Id" hidden />
+            <div class="row">                   
+                <div class="col-12">
+                        <div class="border p-3 mt-4 form-group">
+                            <div asp-validation-summary="All" class="text-danger-emphasis"></div>
+                            @*Place holder is basically used to write someting inside the input section while waiting for text
+                            entry inside , whenever there's a entry inside , it dissapears
+                            however in our context since we used the form-floating class it differently works
+                            As long we don't click in input section the label text is big , else the size decreases.'
+                            *@
+                            <div class="mb-3 form-floating col-12">
+                                <input asp-for="Name" placeholder="" class="form-control border-0 shadow ps-lg-4" />
+                                <label asp-for="Name" class="ms-2"></label>
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                             <div class="mb-3 form-floating col-12">
+                                <input asp-for="StreetAddress" placeholder="" class="form-control border-0 shadow ps-lg-4" />
+                                <label asp-for="StreetAddress" class="ms-2"></label>
+                                <span asp-validation-for="StreetAddress" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3 form-floating col-12">
+                                <input asp-for="City" placeholder="" class="form-control border-0 shadow ps-lg-4" />
+                                <label asp-for="City" class="ms-2"></label>
+
+                                @*Monitor the validation for title in the UI@*@
+                                <span asp-validation-for="City" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3 form-floating col-12">
+                                <input asp-for="State" placeholder="" class="form-control border-0 shadow ps-lg-4" />
+                                <label asp-for="State" class="ms-2"></label>
+
+                                @*Monitor the validation for title in the UI@*@
+                                <span asp-validation-for="State" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3 form-floating col-12">
+                                <input asp-for="PostalCode" placeholder="" class="form-control border-0 shadow ps-lg-4" />
+                                <label asp-for="PostalCode" class="ms-2"></label>
+
+                                @*Monitor the validation for title in the UI@*@
+                                <span asp-validation-for="PostalCode" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3 form-floating col-12">
+                                <input asp-for="PhoneNumber" placeholder="" class="form-control border-0 shadow ps-lg-4" />
+                                <label asp-for="PhoneNumber" class="ms-2"></label>
+
+                                @*Monitor the validation for title in the UI@*@
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>  
+                            <div class="row pt-2">
+                                <div class="col-3 col-md-3">
+                                    <button type="submit" class="btn btn-primary bg-dark" style="width:150px">
+                                        @(Model.Id != 0 ? "Update" : "Create")
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                </div>
+                                <div class="col-3 col-md-3 text-end">
+                                    <a asp-controller="Company" asp-action="Index" class="btn btn-primary">
+                                        Back to list
+                                    </a>
+                                </div>
+
+                            </div>
+                </div>               
+            </div>         
+             
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+@section Scripts
+    {
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'anchor autolink charmap codesample emoticons  lists  searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name',
+            mergetags_list: [
+                { value: 'First.Name', title: 'First Name' },
+                { value: 'Email', title: 'Email' },
+            ],
+            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+        });
+    </script>
+    @{
+
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

@@ -1,0 +1,45 @@
+﻿@using System.Web;
+@{
+    ViewData["Title"] = "Home Page";
+}
+@model IEnumerable<Product>
+<div class="row">
+    <div class="mt-4 mb-5"></div>
+</div>
+<div class="row pb-5 mb-5">
+    @foreach (var product in Model)
+    {
+        <div class="col-lg-3 col-sm-6">
+            <div class="row p-2">
+                <div class="col-12 p-1">
+                    <div class="card border-0 p-3 shadow border-top border-5 rounded text-center ">
+                        <div class="">
+                            <img style="width: 228px; height:390px" src="@product.ImageUrl" class="card-img-top rounded img-fluid" />
+                        </div>                        
+                        <div class="card-body pb-0">
+                            <div class="pl-1">
+                                <p style="font-size:10px" class="card-title h6 text-dark opacity-75 text-uppercase text-center">@product.Title</p>
+                                <p class="card-title text-warning opacity-75 text-uppercase text-center">@product.Author</p>
+                            </div>
+                            <div class="pl-1">
+                                <p class="text-dark opacity-75 text-center mb-0">List Price : <span class="text-decoration-line-through">@product.ListPrice.ToString("c")</span></p>
+                            </div>
+                            <div class="pl-1">
+                                <p class="text-dark opacity-75 text-center">As low as :<span>@product.Price100.ToString("c")</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <a asp-controller="Home" asp-action="Details" 
+                        asp-route-productId="@product.Id"                        
+                        class="btn btn-primary bg-gradient border-0 form-control"> 
+                            Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@*Control a control k +d is to align all html content in razor page*@

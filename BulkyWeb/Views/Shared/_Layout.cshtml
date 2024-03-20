@@ -1,57 +1,124 @@
-﻿<!DOCTYPE html>
-<html lang="en-gb">
+﻿﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+<!DOCTYPE html>
+<html lang="en-gb" data-bs-theme="light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @*Display the message of toast on top of the page*@
     <title>@ViewData["Title"] - BulkyWeb</title>
+    <link rel="icon" type="image/svg" href="~/images/book-half.svg" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />    
+    @*HEre is the bootstrap link to our design theme*@
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/BulkyWeb.styles.css" asp-append-version="true" />
+    @*Javascript link to toast dynamic effect used in the app*@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    @*Css link to toast dynamic effect used in the app*@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css" />
-    <link href="toastr.css" rel="stylesheet" />    
+    <link href="toastr.css" rel="stylesheet" />
+    @*Css link to datatable automatically created effect used in the app*@
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css" />
+    <link href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
     <header>
         <nav id="navbar" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3 fixed-top">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><i class="bi bi-shop"></i></a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><i class="bi bi-book-half"></i> E-Book</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1 nav-pills ml-auto">
+                    <ul class="navbar-nav me-auto nav-pills ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link " asp-area="Customer" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Category" asp-action="Index">Category</a>
+                            <a class="nav-link" asp-area="Admin" asp-controller="Order" asp-action="Index">Manage Order</a>
                         </li>
+                       @* @if(User.IsInRole(SD.Role_Admin))
+                        {*@
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Content Management
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="category" asp-action="Index">Category</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">Product</a>
+                                </li>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Company" asp-action="Index">Company</a>
+                                    </li>                              
+                                <li><a class="dropdown-item text-dark" href="#">Something else here</a></li>
+                            </ul>                                                     
+                        </li>
+                      @*  }    *@
+                        @if (HttpContextAccessor.HttpContext.Session.GetInt32(SD.SessionCart)!=null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link " asp-area="Customer" asp-controller="Cart" asp-action="Index">
+                                    <i class="bi bi-cart"></i> &nbsp
+                                    (@HttpContextAccessor.HttpContext.Session.GetInt32(SD.SessionCart))
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link " asp-area="Customer" asp-controller="Cart" asp-action="Index">
+                                    <i class="bi bi-cart"></i> &nbsp
+                                    (0)
+                                </a>
+                            </li>
+                        }
+
+                    </ul>
+                    <partial name="_loginPartial" />
+                    <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <button class="btn btn-dark pull-right" id="btnSwitch">
+                                <i class="bi bi-toggle-on"></i>
+                            </button>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container mb-3 pb-3">
         <main role="main">
-            <partial name="_Notification"/>         
+            <partial name="_Notification" />
             @RenderBody()
         </main>
     </div>
-
-    <footer class="mt-5 footer bg-primary text-muted">
+    <footer class="mt-5 p-3 footer bg-primary text-muted row-cols-sm-auto">
         <div class="container text-center">
-           @* &copy; 2023 - BulkyWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>*@
+            @* &copy; 2023 - BulkyWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>*@
             <i class="bi bi-heart-fill"></i> By DotNet A.wel's
         </div>
     </footer>
+    <script type="text/javascript">
+        document.getElementById('btnSwitch').addEventListener('click', () => {
+            if (document.documentElement.getAttribute('data-bs-theme') == 'dark') {
+                document.documentElement.setAttribute('data-bs-theme', 'light')
+            }
+            else {
+                document.documentElement.setAttribute('data-bs-theme', 'dark')
+            }
+        })
+    </script>
+       
+    <script src="https://cdn.tiny.cloud/1/ei3qt01vmoxkc2r64pas61zsqslghnmw69ebzkulyr0lq3yz/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
