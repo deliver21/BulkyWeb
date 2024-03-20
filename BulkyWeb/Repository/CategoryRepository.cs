@@ -9,15 +9,10 @@ namespace BulkyWeb.Repository
         public CategoryRepository(ApplicationDbContext db) : base(db)
         { 
             this._db = db;
-        }
-        public void Save()
-        {
-            _db.SaveChanges();
-        }
-
+        }       
         public void Update(Category obj)
         {
-            _db.Categories.Add(obj);
+            _db.Categories.Update(obj);
         }
     }
 }
