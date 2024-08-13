@@ -17,7 +17,7 @@ namespace BulkyWeb.Repository
 
             //Instead of writing _db.Category and so one as in category controller, we write _dbSet that represent the model
             this.dbSet=_db.Set<T>();
-            _db.Products.Include(u=>u.Category);
+            //_db.Products.Include(u=>u.Category);
         }
         public void Add(T entity)
         {
@@ -50,7 +50,7 @@ namespace BulkyWeb.Repository
 
         public IEnumerable<T> GetAll(System.Linq.Expressions.Expression<Func<T, bool>>? filter=null, string ? includeproperties=null)
         {            
-           IQueryable<T> query = dbSet;
+           IQueryable<T> query = dbSet.AsNoTracking();
             if(filter != null)
             {
                 query = query.Where(filter);

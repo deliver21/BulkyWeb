@@ -4,7 +4,7 @@
 <html lang="en-gb" data-bs-theme="light">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     @*Display the message of toast on top of the page*@
     <title>@ViewData["Title"] - BulkyWeb</title>
     <link rel="icon" type="image/svg" href="~/images/book-half.svg" />
@@ -22,7 +22,7 @@
     <link href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-    <header>
+    <header class="mb-1">
         <nav id="navbar" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3 fixed-top">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><i class="bi bi-book-half"></i> E-Book</a>
@@ -35,48 +35,50 @@
                         <li class="nav-item">
                             <a class="nav-link " asp-area="Customer" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="Admin" asp-controller="Order" asp-action="Index">Manage Order</a>
-                        </li>
-                       @* @if(User.IsInRole(SD.Role_Admin))
-                        {*@
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Content Management
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <li class="nav-item">
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="category" asp-action="Index">Category</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">Product</a>
-                                </li>
+                        @if(User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Order" asp-action="Index">Manage Order</a>
+                            </li>
+                        }
+                       
+                       @if(User.IsInRole(SD.Role_Admin))
+                       {                        
+                            <li class="nav-item dropdown">
+                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Content Management
+                                 </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <li class="nav-item">
+                                         <a class="dropdown-item" asp-area="Admin" asp-controller="category" asp-action="Index">Category</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">Product</a>
+                                    </li>
                                     <li class="nav-item">
                                         <a class="dropdown-item" asp-area="Admin" asp-controller="Company" asp-action="Index">Company</a>
-                                    </li>                              
-                                <li><a class="dropdown-item text-dark" href="#">Something else here</a></li>
-                            </ul>                                                     
-                        </li>
-                      @*  }    *@
-                        @if (HttpContextAccessor.HttpContext.Session.GetInt32(SD.SessionCart)!=null)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link " asp-area="Customer" asp-controller="Cart" asp-action="Index">
-                                    <i class="bi bi-cart"></i> &nbsp
-                                    (@HttpContextAccessor.HttpContext.Session.GetInt32(SD.SessionCart))
-                                </a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link " asp-area="Customer" asp-controller="Cart" asp-action="Index">
-                                    <i class="bi bi-cart"></i> &nbsp
-                                    (0)
-                                </a>
-                            </li>
-                        }
+                                    </li>
 
+                                     <li>
+                                        <p class="divider-text d-flex pt-3"></p>
+                                        <a asp-area="Admin" asp-controller="Manager" asp-action="Index" class="dropdown-item text-dark">Clients & Employees</a>
+                                    </li>
+                                    <li>                                        
+                                        <a class="dropdown-item text-dark" asp-area="Identity" asp-page="/Account/Register">Create User</a>
+                                    </li>                                   
+                                </ul>                                                     
+                            </li>
+                       }
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                My Books
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link " asp-area="Customer" asp-controller="Cart" asp-action="Index">
+                                   @await Component.InvokeAsync("ShoppingCart")
+                                </a>
+                            </li>                      
                     </ul>
                     <partial name="_loginPartial" />
                     <ul class="navbar-nav ml-auto">
@@ -90,19 +92,130 @@
             </div>
         </nav>
     </header>
-    <div class="container mb-3 pb-3">
-        <main role="main">
-            <partial name="_Notification" />
-            @RenderBody()
-        </main>
+    
+    <div class="mainId" style="min-height:90vh;">
+            <div class="container mt-3">
+       <main role="main">
+          <partial name="_Notification" />
+           @RenderBody()
+       </main>
     </div>
-    <footer class="mt-5 p-3 footer bg-primary text-muted row-cols-sm-auto">
-        <div class="container text-center">
-            @* &copy; 2023 - BulkyWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>*@
-            <i class="bi bi-heart-fill"></i> By DotNet A.wel's
-        </div>
+    </div>
+
+  
+    <footer class="mt-1 pt-3 footer bg-primary text-white row-cols-sm-auto" style="bottom:0;position:relative; left:0; z-index:10;">
+        <div class="container">
+            <div class="row ">
+                <div class="col-md-3 col-lg-4 col-xl-3 mx-auto my-0" style="line-height: 25px">
+                    <h6 class="fw-bold">
+                        <i class="bi bi-book-half"></i> E-Book
+                    </h6>
+                    <p style="font-size:15px">Your one-stop destination<br /> for digital books.</p>
+                    <p style="font-size:12px">Connect with us on social media:</p>
+                    <div class="row">
+                        <div class="col-1">
+                            <a href="#" class="text-white-50">
+                                <i class="bi bi-whatsapp"></i>
+                            </a>                            
+                        </div>
+                        <div class="col-1">
+                            <a href="#" class="text-white-50">
+                                <i class="bi bi-twitter-x"></i>
+                            </a>                           
+                        </div>
+                         <div class="col-1">
+                            <a href="#" class="text-white-50">
+                                <i class="bi bi-telegram"></i>
+                            </a>
+                            
+                        </div>
+                        <div class="col-1">
+                            <a href="#" class="text-white-50">
+                                <i class="bi bi-google"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-8 col-xl-9 mx-auto my-0" style="line-height:35px">
+                    <h6 class="fw-bold">Quick Links</h6>
+                    <ul class="list-unstyled " style="font-size:13px" >
+                        <li><a class="text-white" style="text-decoration:none;" asp-area="customer" asp-controller="home" asp-action="test">Privacy Policy</a></li>
+                        <li><a class="text-white" style="text-decoration:none;" href="#">Terms of Service</a></li>
+                        <li><a class="text-white" style="text-decoration:none;" href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row mb-0 p-0 text-center fst-italic">
+                <div class="col-md-6 col-lg-8 col-xl-9 mx-auto my-0">
+                    <p>&copy; @DateTime.Now.Year E-Book. All rights reserved.</p>
+                </div>
+            </div>
+        </div>      
     </footer>
     <script type="text/javascript">
+    // Function to toggle between dark and light mode
+    function toggleMode() {
+        const currentMode = document.documentElement.getAttribute('data-bs-theme');
+        const newMode = currentMode === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-bs-theme', newMode);
+        // Store the selected mode in localStorage
+        localStorage.setItem('theme', newMode);
+        // Update text color of elements inside the div with ID 'mainId'
+        updateTextColor(newMode);
+    }
+
+    // Function to update text color of elements inside the div with ID 'mainId'
+        function updateTextColor(mode) {
+            const mainDiv = document.getElementById('mainId');
+            const elementsInsideMain = mainDiv.querySelectorAll('*');
+            elementsInsideMain.forEach(element => {
+                if (mode === 'dark') {
+                    element.style.color = 'white !important';
+                } else {
+                    // Revert to default text color
+                    element.style.color = '';
+                }
+            });
+        }
+
+    // Event listener for the mode switch button
+    document.getElementById('btnSwitch').addEventListener('click', toggleMode);
+
+    // Check if a mode is stored in localStorage and apply it on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        const storedMode = localStorage.getItem('theme');
+        if (storedMode) {
+            document.documentElement.setAttribute('data-bs-theme', storedMode);
+            // Update text color of elements inside the div with ID 'mainId'
+            updateTextColor(storedMode);
+        }
+    });
+</script>
+
+
+@*    <script type="text/javascript">
+        // Function to toggle between dark and light mode
+        function toggleMode() {
+            const currentMode = document.documentElement.getAttribute('data-bs-theme');
+            const newMode = currentMode === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-bs-theme', newMode);
+            // Store the selected mode in localStorage
+            localStorage.setItem('theme', newMode);
+        }
+
+        // Event listener for the mode switch button
+        document.getElementById('btnSwitch').addEventListener('click', toggleMode);
+
+        // Check if a mode is stored in localStorage and apply it on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const storedMode = localStorage.getItem('theme');
+            if (storedMode) {
+                document.documentElement.setAttribute('data-bs-theme', storedMode);
+            }
+        });
+    </script>*@
+    @*<script type="text/javascript">
         document.getElementById('btnSwitch').addEventListener('click', () => {
             if (document.documentElement.getAttribute('data-bs-theme') == 'dark') {
                 document.documentElement.setAttribute('data-bs-theme', 'light')
@@ -111,7 +224,7 @@
                 document.documentElement.setAttribute('data-bs-theme', 'dark')
             }
         })
-    </script>
+    </script>*@
        
     <script src="https://cdn.tiny.cloud/1/ei3qt01vmoxkc2r64pas61zsqslghnmw69ebzkulyr0lq3yz/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

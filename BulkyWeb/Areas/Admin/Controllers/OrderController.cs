@@ -23,7 +23,16 @@ namespace BulkyWeb.Areas.Admin.Controllers
             _unitOfWork = unitOfWork;
         }
         public IActionResult Index(string ? status)
-        {            
+        {
+            //Remove All user OrderHeader with payement status pending because payement failed
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (User.IsInRole(SD.Role_Customer))
+            {
+                List<OrderHeader> orderFailed = _unitOfWork.OrderHeader.GetAll(u => u.ApplicationUserId == userId && u.OrderStatus == SD.PaymentStatusPending).ToList();
+                _unitOfWork.OrderHeader.RemoveRange(orderFailed);
+                _unitOfWork.Save();
+            }
             return View();
         }
         public IActionResult Details(int orderId)
@@ -216,7 +225,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
             {
                 objOrderHeaders = _unitOfWork.OrderHeader.GetAll(u=>u.ApplicationUserId==userId,includeproperties: "ApplicationUser");
             }
-                switch (status)
+            switch (status)
             {
                 case "pending":
                     objOrderHeaders = objOrderHeaders.Where(u => u.PaymentStatus == SD.PaymentStatusPending);

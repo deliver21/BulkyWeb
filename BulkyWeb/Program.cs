@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
 using Stripe;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using BulkyWeb.DbInitializer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,8 +30,6 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly= true;
     options.Cookie.IsEssential= true;
 });
-//
-////HttpService for session
 
 
 // AddDefaultIdentity allows us to have the default so we can't have the role for the use , however below in AddIdentity
@@ -41,7 +40,6 @@ builder.Services.AddSession(options =>
 builder.Services.AddIdentity<IdentityUser,IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 //
-
 //To properly Manage the display of the error such as 404
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -49,10 +47,24 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LogoutPath = $"/Identity/Account/Logout";
     options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 });
+
+//GoogleServices
+//builder.Services.AddAuthentication()
+
+//facebook services
+builder.Services.AddAuthentication().AddFacebook(option =>
+{
+    option.AppId = SD.AppIdFacebook;
+    option.AppSecret = SD.AppSecretFacebook;
+}
+) ;
+
 //We added builder.Services.AddRazorPages() so to allow razor pages to be displayed in our project 
 // we can site the register and the login and we call them further in program by app.MapRazorPages();
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+//add DbInitializer service
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 var app = builder.Build();
 //
@@ -76,6 +88,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 //Add Session service to the app
 app.UseSession();
+//Call SeedDb
+SeedDataBase();
 // Call razor pages
 app.MapRazorPages();
 app.MapControllerRoute(
@@ -83,3 +97,13 @@ app.MapControllerRoute(
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+//Invoke DbInitializer
+void SeedDataBase()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+        //Never forget dbInitializer.Initialize();
+        dbInitializer.Initialize();
+    }
+}

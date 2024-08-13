@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "User Management";
+}
+@*Status choice managed by razor code*@
+@{
+    var role = Context.Request.Query["role"];
+    var customer = "text-primary";
+    var company = "text-primary";
+    var employee = "text-primary";
+    var admin = "text-primary";
+    var all = "text-primary";
+
+    switch (role)
+    {
+        case "customer":
+            customer = "active text-white bg-primary";
+            break;
+        case "company":
+            company = "active text-white bg-primary";
+            break;
+        case "employee":
+            employee = "active text-white bg-primary";
+            break;
+        case "admin":
+            admin = "active text-white bg-primary";
+            break;
+        default:
+            all = "active text-white bg-primary";
+            break;
+    }
+}
+
+
+
+<div class="card shadow border-0 my-5">
+    <div class="card-header bg-primary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-4">
+            </div>
+            <div class="col-4 col-sm-4 text-center">
+                <h3 class="text-white">Users List</h3>
+            </div>
+        </div>
+    </div>
+    <div class="card-body pt-3">
+        <div class="d-flex justify-content-between pb-5 pt-2">
+            <span></span>
+            <ul class="list-group list-group-horizontal-sm">
+                <a style="text-decoration:none;" asp-controller="Manager" asp-action="Index" asp-route-role="customer">
+                <li class="list-group-item @customer">
+                    Customer
+                </li>
+                </a>
+                <a style="text-decoration:none;" asp-controller="Manager" asp-action="Index" asp-route-role="company">
+                <li class="list-group-item @company">
+                    Company
+                </li>
+                </a>
+                <a style="text-decoration:none;" asp-controller="Manager" asp-action="Index" asp-route-role="employee">
+                <li class="list-group-item @employee">
+                    Employee
+                </li>
+                </a>
+                <a style="text-decoration:none;" asp-controller="Manager" asp-action="Index" asp-route-role="admin">
+                <li class="list-group-item @admin">
+                    Administrator
+                </li>
+                </a>
+                <a style="text-decoration:none;" asp-controller="Manager" asp-action="Index" asp-route-role="all">
+                <li class="list-group-item @all">
+                    All
+                </li>
+                </a>
+            </ul>
+
+        </div>
+        <table id="tblData" class="table table-bordered table-striped table-hover" style="width:100%">
+            <thead @*class="table-borderless"*@>
+                <tr>                    
+                    <th>Email</th>
+                    <th>Name</th>
+                    <th>Phone number</th>
+                    <th>Role</th>
+                    <th></th>
+                </tr>
+            </thead>          
+        </table>
+    </div>
+</div>
+
+
+@section Scripts
+    {
+    <script src="~/js/manager.js"></script>
+}

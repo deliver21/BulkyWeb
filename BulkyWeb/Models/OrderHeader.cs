@@ -16,17 +16,17 @@ namespace BulkyWeb.Models
         public DateTime ShippingDate { get; set; }
         public double OrderTotal { get; set; }
 
-        public string? OrderStatus { get; set; }
+        public string? OrderStatus { get; set; } 
         public string? PaymentStatus { get; set; }
         public string? Trackingnumber { get; set; }
-        public string? Carrier { get; set; } 
+        public string? Carrier { get; set; }
 
         public DateTime PaymentDate { get; set; }      
         //DateTime for DateOnly
         public DateOnly PaymentDueDate { get; set; }
 
         //New field for Stripe
-        public string? SessionId;
+        public string? SessionId { get; set; }
 
         public string? PaymentIntentId { get; set; }
 

@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 using System.Security.Claims;
-using System.Web.Mvc;
 
 namespace BulkyWeb.Areas.Customer.Controllers
 {
@@ -28,6 +27,17 @@ namespace BulkyWeb.Areas.Customer.Controllers
             //_unit.OrderDetail.RemoveRange(orderDetail);
             //_unit.OrderHeader.RemoveRange(order);
             //_unit.Save();
+            var claimsIdentity=(ClaimsIdentity)User.Identity;
+            var claim=claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim != null)
+            {
+                HttpContext.Session.SetInt32(SD.SessionCart,
+               _unit.ShoppingCart.GetAll(u => u.ApplicationUserId == claim.Value).Count());
+            }
+            else
+            {
+                HttpContext.Session.SetInt32(SD.SessionCart,0);
+            }
             IEnumerable<Product> productlist = _unit.Product.GetAll(includeproperties: "Category"); 
             return View(productlist);   
         }
@@ -50,7 +60,10 @@ namespace BulkyWeb.Areas.Customer.Controllers
             //var claimsIdentity = (ClaimsIdentity)User.Identity to get the user Id of the logged in user
             //(ClaimsIdentity)User.Identity is to convert it in ClaimsIdentity
             var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;           
+                HttpContext.Session.SetInt32(SD.SessionCart,
+               _unit.ShoppingCart.GetAll(u => u.ApplicationUserId == userId).Count());
+            
             shoppingCart.ApplicationUserId = userId;
             // To avoid duplication in Db while saving Data
             var shoppingCartFromDb=_unit.ShoppingCart.Get(u=>u.ApplicationUserId== userId && u.ProductId==shoppingCart.ProductId);
@@ -74,6 +87,10 @@ namespace BulkyWeb.Areas.Customer.Controllers
             return RedirectToAction(nameof(Index));
         }
         public IActionResult Privacy()
+        {
+            return View();
+        }
+        public IActionResult test()
         {
             return View();
         }

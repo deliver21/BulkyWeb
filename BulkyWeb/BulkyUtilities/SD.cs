@@ -21,5 +21,10 @@
 
 
 		public const string SessionCart = "SessionShoppingCart";
-	}
+
+
+		public const string AppIdFacebook = "353431303785337";
+		public const string AppSecretFacebook = "1374ec31638332c70d1fed8183616f68";
+
+    }
 }

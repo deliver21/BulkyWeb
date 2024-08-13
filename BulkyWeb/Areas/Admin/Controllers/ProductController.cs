@@ -13,7 +13,7 @@ using BulkyWeb.BulkyUtilities;
 namespace BulkyWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    //[Authorize(Roles = SD.Role_Admin)]
+    [Authorize(Roles = SD.Role_Admin)]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unit;
@@ -77,7 +77,6 @@ namespace BulkyWeb.Areas.Admin.Controllers
                 {
                     //Guid.NewGuid().ToString() is used to randomly name files while saving them in the folder
                     //Path.GetExtension(file.FileName) is to get the same extension that the uploaded image
-                    //ImageBuilder.Current.Build(Path.GetFullPath(file.Name), Path.Combine(wwwRootpath, @"images\Products"), resizeSetting);
                     string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                     string productpath = Path.Combine(wwwRootpath, @"images\Products");
                     // While update the product we need to check if the image field is updated or not so that to not change 
@@ -97,12 +96,6 @@ namespace BulkyWeb.Areas.Admin.Controllers
                         file.CopyTo(filestream);
                     }
                     obj.Product.ImageUrl = @"\images\Products\" + filename;
-                    //ResizeSettings resizeSetting = new ResizeSettings
-                    //{
-                    //    Width = 100,
-                    //    Height = 150,
-                    //    Format = Path.GetExtension(file.FileName)
-                    //};            
                                      
                 }
                 if(obj.Product.Id== 0)

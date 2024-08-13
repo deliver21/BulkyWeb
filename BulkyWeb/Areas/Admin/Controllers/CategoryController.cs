@@ -10,7 +10,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 namespace BulkyWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    //[Microsoft.AspNetCore.Authorization.Authorize(Roles =SD.Role_Admin)]
+    [Microsoft.AspNetCore.Authorization.Authorize(Roles = SD.Role_Admin)]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unit;
@@ -159,7 +159,8 @@ namespace BulkyWeb.Areas.Admin.Controllers
             TempData["success"] = "Category is deleted successfully";
             return RedirectToAction("Index");
         }
-        #region
+       
+        #region API CALL
         public IActionResult GetAll()
         {
             List<Category> objCategoryList = _unit.Category.GetAll().ToList();

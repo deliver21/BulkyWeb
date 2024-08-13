@@ -109,9 +109,6 @@ namespace BulkyWeb.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            var claimsIdentity = new ClaimsIdentity();
-            claimsIdentity = (ClaimsIdentity)User.Identity;
-            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -125,9 +122,7 @@ namespace BulkyWeb.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");                   
                     // If we got this far, something failed, redisplay form
-                    HttpContext.Session.SetInt32(SD.SessionCart,
-                       _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId).Count());
-                    return LocalRedirect(returnUrl);
+                   return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -144,10 +139,7 @@ namespace BulkyWeb.Areas.Identity.Pages.Account
                     return Page();
                 }
             }
-            // If we got this far, something failed, redisplay form
-            HttpContext.Session.SetInt32(SD.SessionCart,
-               _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId).Count());
-            return Page();
+           return Page();
         }
     }
 }
