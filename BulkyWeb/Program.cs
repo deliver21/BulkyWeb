@@ -1,14 +1,13 @@
 using BulkyWeb.Data;
 using BulkyWeb.Repository;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using BulkyWeb.BulkyUtilities;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
 using Stripe;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using BulkyWeb.DbInitializer;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,10 +61,10 @@ builder.Services.AddAuthentication().AddFacebook(option =>
 //We added builder.Services.AddRazorPages() so to allow razor pages to be displayed in our project 
 // we can site the register and the login and we call them further in program by app.MapRazorPages();
 builder.Services.AddRazorPages();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 //add DbInitializer service
-builder.Services.AddScoped<IDbInitializer, DbInitializer>();
-builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<IDbInitializer,DbInitializer>();
+builder.Services.AddScoped<EmailSender>();
 var app = builder.Build();
 //
 // Configure the HTTP request pipeline.
@@ -84,7 +83,6 @@ StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey"
 app.UseRouting();
 // Essential to use authentification app.UseAuthentication() always comes before app.UseAuthorization();
 app.UseAuthentication();
-
 app.UseAuthorization();
 //Add Session service to the app
 app.UseSession();
