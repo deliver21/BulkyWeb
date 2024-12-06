@@ -36,9 +36,16 @@ builder.Services.AddSession(options =>
 //    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 //In AddIdentity we can add role
-builder.Services.AddIdentity<IdentityUser,IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddIdentity<IdentityUser,IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 //
+builder.Services.AddLogging(logging =>
+{
+    logging.ClearProviders();
+    logging.AddConsole();
+    logging.AddDebug();
+});
+
 //To properly Manage the display of the error such as 404
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -64,7 +71,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 //add DbInitializer service
 builder.Services.AddScoped<IDbInitializer,DbInitializer>();
-builder.Services.AddScoped<EmailSender>();
+//builder.Services.AddScoped<EmailSender>();
 var app = builder.Build();
 //
 // Configure the HTTP request pipeline.

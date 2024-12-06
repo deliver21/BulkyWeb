@@ -63,10 +63,9 @@ namespace BulkyWeb.DbInitializer
                 },"Admin1.").GetAwaiter().GetResult();
 
 
-                var user =_db.ApplicationUsers.FirstOrDefault(u => u.Email == "delivrewelo@gmail.com");
-                _userManager.AddToRoleAsync(user, SD.Role_Admin).GetAwaiter().GetResult();
+                var user =_db.ApplicationUsers.FirstOrDefault(u => u.Email == "admin@gmail.com");
+                _userManager.AddToRoleAsync(user,SD.Role_Admin).GetAwaiter().GetResult();
             }
-            return;
         }      
     }
 }

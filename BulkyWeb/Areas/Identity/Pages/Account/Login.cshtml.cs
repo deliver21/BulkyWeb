@@ -26,12 +26,13 @@ namespace BulkyWeb.Areas.Identity.Pages.Account
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly IUnitOfWork _unitOfWork;
-
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger,IUnitOfWork unitOfWork)
+        private readonly UserManager<IdentityUser> _userManager;
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger,IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -120,9 +121,9 @@ namespace BulkyWeb.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");                   
+                    _logger.LogInformation("User logged in.");
                     // If we got this far, something failed, redisplay form
-                   return LocalRedirect(returnUrl);
+                    return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
                 {
